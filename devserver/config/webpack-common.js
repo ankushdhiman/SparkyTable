@@ -7,7 +7,7 @@ module.exports = function(entries, output, includes) {
     test: /\.jsx?$/,
     loader: 'babel',
     query: {
-      presets: ['babel-preset-es2015', "babel-preset-stage-1"].map(require.resolve),
+      presets: ['babel-preset-react', 'babel-preset-es2015', "babel-preset-stage-1"].map(require.resolve),
       cacheDirectory: true
     },
     include: includes

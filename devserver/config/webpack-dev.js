@@ -1,12 +1,13 @@
 const webpack = require('webpack')
 const merge = require('lodash.merge')
+const path = require('path');
 
 const commonConfig = require('./webpack-common')
 const eslintDev = require('./eslint-dev.json')
 const eslintCommon = require('./eslint-common.json')
 
 const eslintConfig = merge(eslintCommon, eslintDev)
-const includes = [/\/es6\//]
+const includes = [path.resolve("es6"), path.resolve("site", "src")]
 
 module.exports = function(entries, output) {
   const devConfig = merge(commonConfig(entries, output, includes), {
@@ -17,7 +18,7 @@ module.exports = function(entries, output) {
           test: /\.js$/,
           loader: "eslint",
           query: eslintConfig,
-          include: includes
+          include: path.resolve("es6")
         }
       ]
     },

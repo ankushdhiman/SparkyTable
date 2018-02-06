@@ -7,7 +7,7 @@ const eslintDev = require('./eslint-dev.json')
 const eslintCommon = require('./eslint-common.json')
 
 const eslintConfig = merge(eslintCommon, eslintDev)
-const includes = [path.resolve("es6"), path.resolve("site", "src")]
+const includes = [path.resolve("es6")]
 
 module.exports = function(entries, output) {
   const devConfig = merge(commonConfig(entries, output, includes), {

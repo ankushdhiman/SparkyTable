@@ -18,7 +18,7 @@ module.exports = {
         lastChangeAsk: content => document.createTextNode(content.lastChangeAsk),
         lastChangeBid: content => document.createTextNode(content.lastChangeBid),
         midPrices: content => {
-            var span = document.createElement('SPAN');
+            const span = document.createElement('SPAN');
             span.setAttribute('id', content.name);
             Sparkline.draw(span, content.midPrices);
             return span;

@@ -32,7 +32,6 @@ module.exports = class Table {
         insertionIndex = insertionIndex > -1 ? insertionIndex : this.data.length;
         this.data.splice(insertionIndex, 0, payload);
         this.node.insertBefore(RowFactory(payload, this.rowMapper), this.node.children[insertionIndex + 1]);
-        Sparkline.draw(document.getElementById(payload.name), payload.midPrices);
     }
 
 }

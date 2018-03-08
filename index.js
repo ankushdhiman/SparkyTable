@@ -9,31 +9,29 @@ document.getElementById('root').appendChild(table.node);
 var url = "ws://localhost:8011/stomp"
 var client = Stomp.client(url);
 
-client.debug = function(msg) {
+client.debug = function (msg) {
     if (global.DEBUG) {
-      console.info(msg)
+        console.info(msg)
     }
-  }
+}
+var PubSub = require('./es6/pub-sub');
+var subject = new PubSub.Subject();
+var observer1 = new PubSub.Observer(table.mainCallback.bind(table));
+var observer2 = new PubSub.Observer(table.delayedCallback.bind(table));
+subject.addObserver(observer1);
+subject.addObserver(observer2);
 
 client.connect({},
-    function() {
-        client.subscribe('/fx/prices', function(payload) {
-            // updates table
-            var parsedData = JSON.parse(payload.body);
-            var currentMidPrice = (parsedData.bestAsk + parsedData.bestBid) / 2;
-            var row = table.data.find(function(row){ return row.name == parsedData.name });
-            var existingMidPrices = row ? row.midPrices : [];
-            parsedData.midPrices = existingMidPrices.concat([currentMidPrice]);
-            table.addOrUpdateRow(parsedData);
-
-            // delayed call for deletion of midPrices
+    function () {
+        client.subscribe('/fx/prices', function (payload) {
+            subject.notify(observer1.id, JSON.parse(payload.body));
             setTimeout(function(){
-                var row = table.data.find(function(row){ return row.name == parsedData.name });
-                row.midPrices.shift();
-                table.addOrUpdateRow(row);
-            }, 30000);
+                console.log('delayed running');
+                subject.notify(observer2.id, JSON.parse(payload.body));
+            }, 3000);
         });
     },
-    function(error) {
+    function (error) {
         alert(error.headers.message);
-    });
+    }
+);
